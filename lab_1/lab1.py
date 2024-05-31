@@ -61,7 +61,6 @@ def write_txt(file_name: str, text: str) -> None:
 
 
 def caesar_cipher(text: str, key: int) -> str:
-
     """
     Apply Caesar cipher encryption/decryption to the given text using the specified key.
 
@@ -83,8 +82,10 @@ def write_json(name: str, data: dict) -> dict[str, str]:
     The function for writing to a json file
 
     Args:
-            name: path to the file to write
-            data: data to write to a file
+        name: path to the file to write
+        data: data to write to a file
+    Returns:
+        dict[str, str]: A dictionary containing the JSON data from the file.
     """
     try:
         with open(name, 'w', encoding='utf-8') as f:
@@ -95,7 +96,16 @@ def write_json(name: str, data: dict) -> dict[str, str]:
 
 
 def frequency(path: str, text: str) -> None:
-   
+    """
+    Calculates the frequency of characters appearing in the text and writes the result to a JSON file.
+
+    Args:
+        path: The path to the file where the result will be written.
+        text: The text for which the character frequency needs to be calculated.
+
+    Returns:
+        None. 
+    """
     frequency = {}
     l = len(text)
     text_litters = []
@@ -107,8 +117,19 @@ def frequency(path: str, text: str) -> None:
     write_json(path, frequency)
 
 
-
 def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, path_text_analysis: str) -> None:
+    """ 
+    Decrypts the text using the encryption key.
+
+    Args:
+        path_sourse_text: Path to the file where the decrypted text will be written.
+        path_key: Path to the file with the encryption key (JSON format).
+        path_encrypted_text: Path to the encrypted text file.
+        path_text_analysis: The path to the file to record the analysis of the frequency of letters in the text.
+
+    Returns:
+        None.
+    """
     text: str = read_txt(path_encrypted_text)
     key: dict = read_json(path_key)
     frequency(path_text_analysis, text)
@@ -119,26 +140,27 @@ def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, p
     write_txt(path_sourse_text, new_text)
 
 
-
-
 def main():
-    
-    input_text = read_txt('C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\original_text.txt')
-    json_data = read_json('C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\key.json')
+
+    input_text = read_txt(
+        'C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\original_text.txt')
+    json_data = read_json(
+        'C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\key.json')
     key = int(json_data["caesar_cipher_key"])
     encrypted_text = caesar_cipher(input_text, key)
-    write_txt('C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\encrypted.txt', encrypted_text)
+    write_txt(
+        'C:\\Users\\furso\\Desktop\\isb\\lab_1\\task1\\encrypted.txt', encrypted_text)
     print("Успешно")
 
-   
     path_sourse_text = "C:\\Users\\furso\\Desktop\\isb\\lab_1\\task2\\encrypted_text.txt"
     path_key = "C:\\Users\\furso\\Desktop\\isb\\lab_1\\task2\\key.json"
     path_encrypted_text = "C:\\Users\\furso\\Desktop\\isb\\lab_1\\task2\\original_text1.txt"
     path_text_analysis = "C:\\Users\\furso\\Desktop\\isb\\lab_1\\task2\\frequency.json"
 
-    decryption(path_sourse_text, path_key, path_encrypted_text, path_text_analysis)
+    decryption(path_sourse_text, path_key,
+               path_encrypted_text, path_text_analysis)
     print("Успешно")
 
-   
+
 if __name__ == "__main__":
     main()
