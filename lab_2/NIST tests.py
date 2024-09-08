@@ -36,6 +36,25 @@ def analyze_bit_sequence(bit_sequence):
     return p_value
 
 
+def the_same_consecutive_bits(bits):
+    n = len(bits)
+    a = sum(bits)/ n
+    
+    if abs(a - 0.5) >= 2 / math.sqrt(n):
+        return 0
+    
+    V = 1
+    for i in range(1, n):
+        if bits[i] != bits[i - 1]:
+            V += 1
+    c=abs(V - 2 * n * a * (1 - a))
+    d=(2 * math.sqrt(2 * n) * a * (1 - a))
+    print(f"c: {c}, d: {d}")
+    p_value = math.erfc(c/d)
+    return p_value
+
+
+
 def main() -> None:
     java_data = read_json(PATH)
 
@@ -45,6 +64,13 @@ def main() -> None:
     else:
         print('No data found!')
 
+    bit_sequence_str = "1001101011"
+    bit_sequence = [int(bit) for bit in bit_sequence_str]
+    p_value = the_same_consecutive_bits(bit_sequence)
+    if p_value == 0:
+        print("Тест неуспешен.")
+    else:
+        print(f"P-значение: {p_value}")   
 
 if __name__ == "__main__":
     main()
