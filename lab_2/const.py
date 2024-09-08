@@ -1,0 +1,1 @@
+PATH = "isb\\lab_2\\data.json"
