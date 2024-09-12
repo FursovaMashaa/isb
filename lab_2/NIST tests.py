@@ -9,10 +9,10 @@ from const import PATH, PI
 
 def read_json(file_name: str) -> Dict[str, str]:
     """
-    Read JSON from the specified file name.
+    Read JSON from the specified file name
 
     Args:
-        file_name (str): The name of the file to read.
+        file_name (str): The name of the file to read
 
     Returns:
         Dict[str, str]: key dictionary
@@ -31,13 +31,13 @@ def read_json(file_name: str) -> Dict[str, str]:
 
 def frequency_bitwise_test(bit_sequence: str) -> float:
     """
-    Perform a frequency test on a given bit sequence using a bitwise approach.
+    Perform a frequency test on a given bit sequence using a bitwise approach
 
     Args:
-        bit_sequence (str): A string representing the bit sequence (only '0's and '1's).
+        bit_sequence (str): A string representing the bit sequence (only '0's and '1's)
 
     Returns:
-        float: The p-value resulting from the frequency test. 
+        float: The p-value resulting from the frequency test
     """
     total_sum = sum(1 if bit == '1' else -1 for bit in bit_sequence)
     S_obs = abs(total_sum) / len(bit_sequence)
@@ -47,20 +47,18 @@ def frequency_bitwise_test(bit_sequence: str) -> float:
 
 def the_same_consecutive_bits(bits: str) -> float:
     """
-    The test is to find all sequences of the same bits.
+    The test is to find all sequences of the same bits
 
     Args:
-        bits (str): A string representing the bit sequence (only '0's and '1's).
+        bits (str): A string representing the bit sequence (only '0's and '1's)
 
     Returns:
-        float: The p-value indicating the randomness of the sequence. .
+        float: The p-value indicating the randomness of the sequence
     """
     n = len(bits)
     a = bits.count("1") / n
-
     if abs(a - 0.5) >= 2 / math.sqrt(n):
         return 0
-
     V = 1
     for i in range(1, n):
         if bits[i] != bits[i - 1]:
@@ -73,13 +71,13 @@ def the_same_consecutive_bits(bits: str) -> float:
 
 def max_consecutive_ones(block: str) -> int:
     """
-    Finds the maximum number of consecutive units in a binary string.
+    Finds the maximum number of consecutive units in a binary string
 
     Args:
-        block (str): A string representing the bit sequence (only '0's and '1's).
+        block (str): A string representing the bit sequence (only '0's and '1's)
 
     Returns:
-        int: The maximum number of consecutive units in a row.
+        int: The maximum number of consecutive units in a row
     """
     max_count = 0
     current_count = 0
@@ -97,10 +95,10 @@ def analyze_sequence(sequence: str) -> float:
     Test for the longest sequence of units in a block
 
     Args:
-        sequence (str): A string representing the bit sequence (only '0's and '1's).
+        sequence (str): A string representing the bit sequence (only '0's and '1's)
 
     Returns:
-        float: The p-value indicating the randomness of the sequence. .
+        float: The p-value indicating the randomness of the sequence
     """
     block_size = 8
     blocks = [sequence[i:i + block_size]
@@ -119,9 +117,7 @@ def analyze_sequence(sequence: str) -> float:
             V[3] += 1
 
     x_squared = sum((V[i] - 16 * PI[i]) ** 2 / (16 * PI[i]) for i in range(4))
-
     p_value = mpmath.gammainc(1.5, x_squared / 2)
-
     return p_value
 
 

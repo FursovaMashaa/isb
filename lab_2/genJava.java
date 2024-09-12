@@ -1,5 +1,9 @@
 import java.security.SecureRandom;
 
+/*
+ * The Binary Random Generator class generates a random binary sequence
+ * 128-bit long
+ */
 public class BinaryRandomGenerator {
     private static final int BYTE_LENGTH = 16; 
 
