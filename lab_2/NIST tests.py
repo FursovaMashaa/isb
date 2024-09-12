@@ -15,7 +15,7 @@ def read_json(file_name: str) -> Dict[str, str]:
         file_name (str): The name of the file to read.
 
     Returns:
-        dict[str, str] | None: A dictionary containing the JSON data from the file or None if there was an error.
+        Dict[str, str]: key dictionary
     """
     try:
         with open(file_name, 'r', encoding='utf-8') as file:
@@ -30,6 +30,15 @@ def read_json(file_name: str) -> Dict[str, str]:
 
 
 def frequency_bitwise_test(bit_sequence: str) -> float:
+    """
+    Perform a frequency test on a given bit sequence using a bitwise approach.
+
+    Args:
+        bit_sequence (str): A string representing the bit sequence (only '0's and '1's).
+
+    Returns:
+        float: The p-value resulting from the frequency test. 
+    """
     total_sum = sum(1 if bit == '1' else -1 for bit in bit_sequence)
     S_obs = abs(total_sum) / len(bit_sequence)
     p_value = math.erfc(S_obs / math.sqrt(2))
@@ -37,6 +46,15 @@ def frequency_bitwise_test(bit_sequence: str) -> float:
 
 
 def the_same_consecutive_bits(bits: str) -> float:
+    """
+    The test is to find all sequences of the same bits.
+
+    Args:
+        bits (str): A string representing the bit sequence (only '0's and '1's).
+
+    Returns:
+        float: The p-value indicating the randomness of the sequence. .
+    """
     n = len(bits)
     a = bits.count("1") / n
 
@@ -54,6 +72,15 @@ def the_same_consecutive_bits(bits: str) -> float:
 
 
 def max_consecutive_ones(block: str) -> int:
+    """
+    Finds the maximum number of consecutive units in a binary string.
+
+    Args:
+        block (str): A string representing the bit sequence (only '0's and '1's).
+
+    Returns:
+        int: The maximum number of consecutive units in a row.
+    """
     max_count = 0
     current_count = 0
     for bit in block:
@@ -66,6 +93,15 @@ def max_consecutive_ones(block: str) -> int:
 
 
 def analyze_sequence(sequence: str) -> float:
+    """
+    Test for the longest sequence of units in a block
+
+    Args:
+        sequence (str): A string representing the bit sequence (only '0's and '1's).
+
+    Returns:
+        float: The p-value indicating the randomness of the sequence. .
+    """
     block_size = 8
     blocks = [sequence[i:i + block_size]
               for i in range(0, len(sequence), block_size)]
