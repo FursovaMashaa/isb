@@ -1,0 +1,8 @@
+{
+    "initial_file":"lab_3/texts/original_text.txt",
+    "encrypted_file":"lab_3/texts/encrypted_text.txt",
+    "decrypted_file":"lab_3/texts/decrypted_text.txt",
+    "symmetric_key":"lab_3/key/public_key.pem",
+    "public_key":"lab_3/key/secret_key.pem",
+    "secret_key":"lab_3/key/symmetric_key.txt"
+}

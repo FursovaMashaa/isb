@@ -1,13 +1,13 @@
 import os 
 
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
-def generate_symmetric_key():
-     return os.urandom(16)
 
-def serialize_key(self, filename):
-        with open(filename, 'wb') as file:
-            file.write(self.key)
+def generate_symmetric_key(key_path):
+    sym_key = os.urandom(16)  
+    with open(key_path, 'wb') as f:
+        f.write(sym_key)
 
-def deserialize_key(self, filename):
-        with open(filename, 'rb') as file:
-            self.key = file.read()
+if __name__ == "__main__":
+    generate_symmetric_key('C:\\Users\\furso\\Desktop\\isb\\lab_3\\key\\symmetric_key.txt')
