@@ -1,5 +1,7 @@
 import json
-from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.serialization import load_pem_private_key, load_pem_public_key
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 class FileFunctions:
     def read_txt(file_path: str) -> str:
@@ -36,7 +38,7 @@ class FileFunctions:
                 
 
 
-    def write_txt(data: str, path: str) -> None:
+    def write_txt(path: str, data: str) -> None:
         """
         Write the given text to a specified file.
 
@@ -53,6 +55,51 @@ class FileFunctions:
         except Exception as e:
             print(f"An error occurred while writing to the file: {e}")
 
+    def write_bytes(path: str, data: str) -> str:
+        with open(path, 'wb') as f:
+            f.write(data)
+
+    def read_bytes(path: str) -> bytes:
+        with open(path, 'rb') as f:
+            data=f.read()
+            return data
+        
+    def serialize_private_key(self, path: str) -> None:
+        pem_private = self.private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        with open(path, 'wb') as f:
+            f.write(pem_private)
+
+    def serialize_public_key(self, path: str) -> None:
+        pem_public = self.public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+        with open(path, 'wb') as f:
+            f.write(pem_public)
+    
+    def deserialize_private_key(path: str) -> rsa.RSAPrivateKey:
+        with open(path, 'rb') as f:
+            pem_private = f.read()
+        return load_pem_private_key(
+            pem_private,
+            password=None 
+        )
+
+    def deserialize_public_key(path: str) -> rsa.RSAPrivateKey:
+        with open(path, 'rb') as f:
+            pem_public = f.read()
+        return load_pem_public_key(pem_public)
 
 
+    def serialize_symmetric_key(key: bytes, path: str) -> None:
+        with open(path, 'wb') as f:
+            f.write(key)
 
+    def deserialize_symmetric_key(path: str) -> bytes:
+        with open(path, 'rb') as f:
+            return f.read()
+       
