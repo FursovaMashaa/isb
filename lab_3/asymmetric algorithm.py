@@ -2,46 +2,51 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import serialization, hashes
 
-def generate_asymmetric_keys(public_key_path, private_key_path):
-    private_key = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=2048,
-        backend=default_backend()
-    )
-    public_key = private_key.public_key()
+from files import FileFunctions
 
-    pem_private = private_key.private_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.TraditionalOpenSSL,
-        encryption_algorithm=serialization.NoEncryption()  # Добавлено
-    )
-    pem_public = public_key.public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo
-    )
+class Asymmetric:
+    def __init__(self):
+        self.private_key = None
+        self.public_key = None
 
-    with open(private_key_path, 'wb') as f:
-        f.write(pem_private)
-
-    with open(public_key_path, 'wb') as f:
-        f.write(pem_public)
-
-    return public_key, private_key
-
-def encrypt_symmetric_key(symmetric_key_path, public_key):
-    with open(symmetric_key_path, 'rb') as f:
-        sym_key = f.read()
-
-    encrypted_sym_key = public_key.encrypt(
-        sym_key,
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
+    def generate_keys(self, public_key_path: str, private_key_path: str):
+        self.private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048,
+            backend=default_backend()
         )
-    )
+        self.public_key = self.private_key.public_key()
 
-    return encrypted_sym_key
+        self.serialize_private_key(private_key_path)
+        self.serialize_public_key(public_key_path)
+
+    def serialize_private_key(self, path: str):
+        pem_private = self.private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        with open(path, 'wb') as f:
+            f.write(pem_private)
+
+    def serialize_public_key(self, path: str):
+        pem_public = self.public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+        with open(path, 'wb') as f:
+            f.write(pem_public)
+
+    def encrypt_symmetric_key(self, symmetric_key: bytes) -> bytes:
+        encrypted_sym_key = self.public_key.encrypt(
+            symmetric_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        return encrypted_sym_key
 
 if __name__ == "__main__":
     symmetric_key_path = 'C:\\Users\\furso\\Desktop\\isb\\lab_3\\key\\symmetric_key.txt'
