@@ -2,6 +2,7 @@ import os
 
 from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives import hashes
 
 from files import FileFunctions
 
@@ -15,8 +16,6 @@ class Symmetric:
 
     def encrypt_text(self, original_text_path: str, encryption_path: str, key: bytes) -> bytes:
         padder = padding.PKCS7(128).padder()
-
-        # Чтение оригинального текста из файла
         text = FileFunctions.read_bytes(original_text_path).decode('utf-8')
         padded_text = padder.update(text.encode('utf-8')) + padder.finalize()
 
@@ -49,18 +48,47 @@ class Symmetric:
                                 unpadder_dc_text.decode('UTF-8'))
 
         return unpadder_dc_text.decode('UTF-8')
+    
+    def encrypt_key(self, sym_key: bytes, public_key_path: str) -> bytes:
+        pub_key = FileFunctions.deserialize_public_key(public_key_path)
+        encrypted_key = pub_key.encrypt(
+            sym_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None,
+            ),
+        )
+        return encrypted_key
+
+    def decrypt_key(self, encrypted_key: bytes, private_key_path: str) -> bytes:
+        secret_key = FileFunctions.deserialize_private_key(private_key_path)
+        decrypted_key = secret_key.decrypt(
+            encrypted_key,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None,
+            ),
+        )
+        return decrypted_key
 
 
 if __name__ == "__main__":
-    original_text_file = "C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\original_text.txt"
-    encrypted_file = "C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\encrypted_text.txt"
-    symmetric_key_file = "C:\\Users\\furso\\Desktop\\isb\\lab_3\\key\\symmetric_key.txt"
-    decrypted_file = "C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\decrypted_text.txt"
 
+
+    # Создание симметричного ключа
     symmetric = Symmetric()
-    sym_key = symmetric.generate_symmetric_key(symmetric_key_file)
-    symmetric.encrypt_text(
-        original_text_file, encrypted_file, symmetric_key_file)
-    symmetric.decrypt_text(encrypted_file, decrypted_file, symmetric_key_file)
 
-    print("Симметричный ключ сгенерирован, текст зашифрован и расшифрован.")
+
+    # Путь к ключу
+    key_path = r'C:\\Users\\furso\\Desktop\\isb\\lab_3\\key\\symmetric_key.txt'
+
+    # Шифрование
+    original_text_path = r'C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\original_text.txt'
+    encryption_path = r'C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\encrypted_text.txt'
+    symmetric.encrypt_text(original_text_path, encryption_path, key_path)
+
+    # Дешифрование
+    decrypted_text_path = r'C:\\Users\\furso\\Desktop\\isb\\lab_3\\texts\\decrypted_text.txt'
+    symmetric.decrypt_text(encryption_path, decrypted_text_path, key_path)
