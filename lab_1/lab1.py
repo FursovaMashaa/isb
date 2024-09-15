@@ -23,7 +23,6 @@ def read_txt(file_name: str) -> str:
     except Exception as e:
         print(f"error: {e}")
 
-
 def read_json(file_name: str) -> dict[str, str]:
     """
     Read JSON from the specified file name
@@ -43,7 +42,6 @@ def read_json(file_name: str) -> dict[str, str]:
     except Exception as e:
         print(f"error: {e}")
 
-
 def write_txt(file_name: str, text: str) -> None:
     """
     Write the given text to a specified file
@@ -61,7 +59,6 @@ def write_txt(file_name: str, text: str) -> None:
     except Exception as e:
         print(f"An error occurred while writing to the file: {e}")
 
-
 def caesar_cipher(text: str, key: int) -> str:
     """
     Apply Caesar cipher encryption/decryption to the given text using the specified key
@@ -77,7 +74,6 @@ def caesar_cipher(text: str, key: int) -> str:
     shifted_alphabet = alphabet[key:] + alphabet[:key]
     table = str.maketrans(alphabet, shifted_alphabet)
     return text.translate(table)
-
 
 def write_json(name: str, data: dict) -> dict[str, str]:
     """
@@ -95,7 +91,6 @@ def write_json(name: str, data: dict) -> dict[str, str]:
         return res
     except Exception as e:
         print(f"An error occurred while writing the JSON file: {str(e)}.")
-
 
 def frequency(path: str, text: str) -> None:
     """
@@ -117,7 +112,6 @@ def frequency(path: str, text: str) -> None:
     for i in text_litters:
         frequency[i] = text.count(i) / l
     write_json(path, frequency)
-
 
 def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, path_text_analysis: str) -> None:
     """ 
@@ -141,25 +135,23 @@ def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, p
             new_text += key[letter]
     write_txt(path_sourse_text, new_text)
 
-
 def main():
-
     paths = read_json(path_to_file)
 
     input_text = read_txt(paths["original_text_task1"])
     json_data = read_json(paths["key_task1"])
     key = int(json_data["caesar_cipher_key"])
-    
+
     encrypted_text = caesar_cipher(input_text, key)
     write_txt(paths["encrypted_text_task1"], encrypted_text)
     print("Шифрование успешно")
 
-
     path_source_text = paths["text_decrypted_task2"]
     path_key = paths["key_task2"]
     path_encrypted_text = paths["text_encrypted_task2"]
-    
-    decryption(path_source_text, path_key, path_encrypted_text, paths["frequency"])
+
+    decryption(path_source_text, path_key,
+               path_encrypted_text, paths["frequency"])
     print("Дешифрование успешно")
 
 if __name__ == "__main__":
