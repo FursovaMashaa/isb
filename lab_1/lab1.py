@@ -23,6 +23,7 @@ def read_txt(file_name: str) -> str:
     except Exception as e:
         print(f"error: {e}")
 
+
 def read_json(file_name: str) -> dict[str, str]:
     """
     Read JSON from the specified file name
@@ -42,6 +43,7 @@ def read_json(file_name: str) -> dict[str, str]:
     except Exception as e:
         print(f"error: {e}")
 
+
 def write_txt(file_name: str, text: str) -> None:
     """
     Write the given text to a specified file
@@ -59,6 +61,7 @@ def write_txt(file_name: str, text: str) -> None:
     except Exception as e:
         print(f"An error occurred while writing to the file: {e}")
 
+
 def caesar_cipher(text: str, key: int) -> str:
     """
     Apply Caesar cipher encryption/decryption to the given text using the specified key
@@ -74,6 +77,7 @@ def caesar_cipher(text: str, key: int) -> str:
     shifted_alphabet = alphabet[key:] + alphabet[:key]
     table = str.maketrans(alphabet, shifted_alphabet)
     return text.translate(table)
+
 
 def write_json(name: str, data: dict) -> dict[str, str]:
     """
@@ -91,6 +95,7 @@ def write_json(name: str, data: dict) -> dict[str, str]:
         return res
     except Exception as e:
         print(f"An error occurred while writing the JSON file: {str(e)}.")
+
 
 def frequency(path: str, text: str) -> None:
     """
@@ -113,15 +118,16 @@ def frequency(path: str, text: str) -> None:
         frequency[i] = text.count(i) / l
     write_json(path, frequency)
 
+
 def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, path_text_analysis: str) -> None:
     """ 
-    Decrypts the text using the encryption key.
+    Decrypts the text using the encryption key
 
     Args:
-        path_sourse_text: Path to the file where the decrypted text will be written.
-        path_key: Path to the file with the encryption key (JSON format).
-        path_encrypted_text: Path to the encrypted text file.
-        path_text_analysis: The path to the file to record the analysis of the frequency of letters in the text.
+        path_sourse_text: Path to the file where the decrypted text will be written
+        path_key: Path to the file with the encryption key (JSON format)
+        path_encrypted_text: Path to the encrypted text file
+        path_text_analysis: The path to the file to record the analysis of the frequency of letters in the text
 
     Returns:
         None.
@@ -134,6 +140,7 @@ def decryption(path_sourse_text: str, path_key: str, path_encrypted_text: str, p
         if letter in key:
             new_text += key[letter]
     write_txt(path_sourse_text, new_text)
+
 
 def main():
     paths = read_json(path_to_file)
