@@ -35,6 +35,8 @@ class FileFunctions:
         deserialize_symmetric_key(path: str) -> bytes:
             Loads and deserializes a symmetric key from a specified file
     """
+    def __init__(self):
+        pass
     def read_txt(file_path: str) -> str:
         """
         Reads text from a text file

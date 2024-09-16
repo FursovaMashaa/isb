@@ -8,10 +8,6 @@ class Asymmetric:
     """
     A class for generating and managing asymmetric encryption keys
 
-    Attributes:
-        private_key (rsa.RSAPrivateKey): The private key for asymmetric encryption
-        public_key (rsa.RSAPublicKey): The public key for asymmetric encryption
-
     Methods:
         generate_keys() -> tuple[rsa.RSAPublicKey, rsa.RSAPrivateKey]:
             Generates a pair of RSA keys (public and private)
