@@ -50,10 +50,8 @@ class FileFunctions:
         try:
             with open(file_path, 'r', encoding='utf-8') as file:
                 return file.read()
-        except FileNotFoundError:
-            print("the file was not found")
         except Exception as e:
-            print(f"error: {e}")
+            print(f"Error: {e}")
 
     def read_json(file_name: str) -> dict[str, str]:
         """
@@ -65,8 +63,11 @@ class FileFunctions:
         Returns:
             dict[str, str]: A dictionary containing the JSON data from the file
         """
-        with open(file_name, 'r', encoding='UTF-8') as file:
-            return json.load(file)
+        try:
+            with open(file_name, 'r', encoding='UTF-8') as file:
+                return json.load(file)
+        except Exception as e:
+            print(f"Error: {e}")
 
     def write_txt(path: str, data: str) -> None:
         """
@@ -96,8 +97,11 @@ class FileFunctions:
         Returns:
             None
         """
-        with open(path, 'wb') as f:
-            f.write(data)
+        try:
+            with open(path, 'wb') as f:
+                f.write(data)
+        except Exception as e:
+            print(f"Error: {e}")
 
     def read_bytes(path: str) -> bytes:
         """
@@ -110,9 +114,12 @@ class FileFunctions:
             bytes: The binary content read from the file
 
         """
-        with open(path, 'rb') as f:
-            data = f.read()
-            return data
+        try:
+            with open(path, 'rb') as f:
+                data = f.read()
+                return data
+        except Exception as e:
+            print(f"Error: {e}")
 
     def serialize_private_key(path: str, private_key: rsa.RSAPrivateKey) -> None:
         """
