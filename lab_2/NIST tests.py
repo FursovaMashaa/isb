@@ -40,7 +40,7 @@ def frequency_bitwise_test(bit_sequence: str) -> float:
         float: The p-value resulting from the frequency test
     """
     total_sum = sum(1 if bit == '1' else -1 for bit in bit_sequence)
-    S_obs = abs(total_sum) / len(bit_sequence)
+    S_obs = abs(total_sum) / math.sqrt(len(bit_sequence))
     p_value = math.erfc(S_obs / math.sqrt(2))
     return p_value
 
@@ -57,11 +57,11 @@ def the_same_consecutive_bits(bits: str) -> float:
     """
     n = len(bits)
     a = bits.count("1") / n
-    if abs(a - 0.5) >= 2 / math.sqrt(n):
+    if abs(a - 0.5) >= (2 / math.sqrt(n)):
         return 0
-    V = 1
-    for i in range(1, n):
-        if bits[i] != bits[i - 1]:
+    V = 0
+    for i in range(n-1):
+        if bits[i] != bits[i + 1]:
             V += 1
     c = abs(V - 2 * n * a * (1 - a))
     d = (2 * math.sqrt(2 * n) * a * (1 - a))
@@ -107,14 +107,15 @@ def analyze_sequence(sequence: str) -> float:
     for block in blocks:
         max_length = max_consecutive_ones(block)
 
-        if max_length == 0 or max_length == 1:
-            V[0] += 1
-        elif max_length == 2:
-            V[1] += 1
-        elif max_length == 3:
-            V[2] += 1
-        elif max_length > 3:
-            V[3] += 1
+        match max_length:
+            case _ if max_length <= 1:
+                V[0] += 1
+            case 2:
+                V[1] += 1
+            case 3:
+                V[2] += 1
+            case _:
+                V[3] += 1
 
     x_squared = sum((V[i] - 16 * PI[i]) ** 2 / (16 * PI[i]) for i in range(4))
     p_value = mpmath.gammainc(1.5, x_squared / 2)
